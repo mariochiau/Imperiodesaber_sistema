@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema Império de Saber</title>
+    <style>
+        :root {
+            --primary: #044351;    /* Azul Petróleo do Logo */
+            --accent: #f2b705;     /* Dourado da Coroa */
+            --secondary: #2d7a44;  /* Verde */
+            --danger: #ff4d4d;     /* Vermelho Sair/Excluir */
+            --light: #f4f7f6;
+        }
+
+        body { font-family: 'Segoe UI', sans-serif; background: var(--light); margin: 0; padding: 0; color: #333; }
+        
+        /* TELA DE LOGIN */
+        #tela-login { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; padding: 20px; box-sizing: border-box; }
+        .login-box { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 350px; text-align: center; border-top: 6px solid var(--accent); }
+
+        /* ÁREA DE GESTÃO */
+        #area-gestao { display: none; padding: 15px; }
+
+        /* CABEÇALHO AJUSTADO (PARA O BOTÃO SAIR RESPIRAR) */
+        header { 
+            background: var(--primary); 
+            color: white; 
+            padding: 25px 15px; 
+            border-radius: 8px; 
+            text-align: center; 
+            margin-bottom: 20px; 
+            border-bottom: 5px solid var(--accent); 
+            position: relative; 
+            display: flex; 
+            align-items: center;
+            justify-content: center;
+            min-height: 70px; 
+        }
+
+        header h2 {
+            margin: 0;
+            font-size: 18px;
+            padding-right: 75px; /* Espaço de segurança para o botão */
+            padding-left: 10px;
+        }
+
+        .btn-logout { 
+            background: var(--danger); 
+            width: auto !important; 
+            padding: 8px 12px !important; 
+            position: absolute; 
+            top: 50%; 
+            right: 15px; 
+            transform: translateY(-50%); 
+            font-size: 11px !important; 
+            font-weight: bold;
+            border-radius: 6px;
+            border: none;
+            color: white;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+
+        /* CARDS E FORMULÁRIOS */
+        .card { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        h3 { margin-top: 0; color: var(--primary); display: flex; align-items: center; gap: 8px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+
+        input, select, textarea { width: 100%; padding: 12px; margin: 8px 0 15px 0; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 16px; }
+        label { font-weight: bold; font-size: 14px; color: var(--primary); }
+        
+        .btn-group { display: grid; grid-template-columns: 1fr; gap: 10px; }
+        button { width: 100%; padding: 14px; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 15px; text-transform: uppercase; }
+        
+        .btn-add { background: var(--secondary); }
+        .btn-excel { background: #1d6f42; }
+        .btn-print { background: #555; }
+        .btn-edit { background: #007bff; margin-bottom: 10px; }
+
+        /* TABELA */
+        table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background: var(--primary); color: white; }
+
+        /* MODAL FICHA DO ALUNO */
+        .modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); overflow-y: auto; }
+        .modal-content { background: white; margin: 2% auto; padding: 20px; width: 92%; border-radius: 15px; max-width: 500px; border-top: 8px solid var(--accent); position: relative; }
+        
+        .foto-perfil-container { text-align: center; margin-bottom: 15px; }
+        .foto-preview { width: 120px; height: 120px; border-radius: 50%; border: 4px solid var(--accent); object-fit: cover; background: #eee; }
+        
+        .ficha-nome { color: var(--primary); font-size: 24px; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-bottom: 15px; text-align: center; }
+        .info-linha { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; font-size: 16px; padding-bottom: 4px; }
+        
+        /* DOCUMENTOS */
+        .doc-item { display: flex; align-items: center; justify-content: space-between; background: #f0f0f0; padding: 10px; margin-top: 8px; border-radius: 5px; border-left: 4px solid var(--primary); }
+        .doc-actions { display: flex; gap: 10px; }
+        .btn-icon { padding: 5px 10px !important; font-size: 12px !important; width: auto !important; }
+
+        /* MENSALIDADES */
+        .grid-mensalidade { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 20px 0; }
+        .mes-item { border: 1px solid #ddd; padding: 10px; text-align: center; border-radius: 8px; font-size: 11px; cursor: pointer; font-weight: bold; }
+        .pago { background: #d4edda; color: #155724; border-color: #c3e6cb; }
+        .pendente { background: #f8d7da; color: #721c24; border-color: #f5c6cb; }
+
+        @media print { .no-print, #tela-login, button, .btn-logout, .btn-icon { display: none !important; } }
+    </style>
+</head>
+<body>
+
+    <div id="tela-login">
+        <div class="login-box">
+            <img src="logo.png" style="width: 150px; display: block; margin: 0 auto 15px auto;">
+            <h2 style="color: var(--primary); margin-bottom: 20px;">Império de Saber</h2>
+            <input type="password" id="senhaInput" placeholder="Senha de Acesso">
+            <button class="btn-add" style="background: var(--primary)" onclick="fazerLogin()">Entrar</button>
+            <p id="erro" style="color:var(--danger); display:none; margin-top:10px;">Senha incorreta!</p>
+        </div>
+    </div>
+
+    <div id="area-gestao">
+        <header>
+            <h2>Gestão Império de Saber</h2>
+            <button class="btn-logout" onclick="location.reload()">Sair</button>
+        </header>
+
+        <div class="card no-print">
+            <h3>📝 Novo Cadastro</h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <input type="text" id="nome" placeholder="Nome Completo">
+                <input type="text" id="data" placeholder="Aniversário (Ex: 03/12)">
+                <input type="number" id="anoNasc" placeholder="Ano Nascimento">
+                <input type="text" id="dataInscricao" placeholder="Data Inscrição">
+                <select id="grupo">
+                    <option value="1º Ano">1º Ano</option>
+                    <option value="2º Ano">2º Ano</option>
+                    <option value="3º Ano">3º Ano</option>
+                    <option value="4º Ano">4º Ano</option>
+                    <option value="5º Ano">5º Ano</option>
+                </select>
+            </div>
+            <input type="text" id="nomeMae" placeholder="Nome da Mãe">
+            <input type="text" id="nomePai" placeholder="Nome do Pai">
+            <input type="tel" id="celularPais" placeholder="Celular/WhatsApp">
+            <input type="text" id="bairro" placeholder="Bairro de Residência">
+            <textarea id="saude" placeholder="Observações de Saúde"></textarea>
+            
+            <div class="btn-group">
+                <button class="btn-add" onclick="adicionar()">Salvar Aluno</button>
+                <button class="btn-excel" onclick="baixarExcel()">Exportar Excel</button>
+                <button class="btn-print" onclick="window.print()">Imprimir PDF</button>
+            </div>
+        </div>
+
+        <div class="card no-print">
+            <input type="text" id="busca" placeholder="🔍 Buscar aluno por nome..." onkeyup="renderizar()">
+        </div>
+
+        <table>
+            <thead><tr><th>Niver</th><th>Nome do Estudante</th><th>Turma</th><th>Idade</th></tr></thead>
+            <tbody id="tabela"></tbody>
+        </table>
+    </div>
+
+    <div id="modalAluno" class="modal">
+        <div class="modal-content">
+            <div id="viewPerfil">
+                <div class="foto-perfil-container">
+                    <img id="mFotoPreview" class="foto-preview" src="" alt="Foto">
+                    <div class="no-print"><label style="cursor:pointer; color:blue; font-size:12px;">[ Alterar Foto ]<input type="file" id="inputFoto" hidden accept="image/*" onchange="uploadFoto(this)"></label></div>
+                </div>
+                <div id="mNome" class="ficha-nome"></div>
+                <div class="info-linha">🎂 <b>Niver:</b> <span id="mData"></span></div>
+                <div class="info-linha">📅 <b>Inscrição:</b> <span id="mInsc"></span></div>
+                <div class="info-linha">🏫 <b>Turma:</b> <span id="mAnoEscolar"></span></div>
+                <div class="info-linha">👩‍🍼 <b>Mãe:</b> <span id="mMae"></span></div>
+                <div class="info-linha">👨‍🍼 <b>Pai:</b> <span id="mPai"></span></div>
+                <div class="info-linha">📞 <b>Celular:</b> <span id="mCel"></span></div>
+                <div class="info-linha">🏠 <b>Bairro:</b> <span id="mBairro"></span></div>
+                <div class="info-linha">🏥 <b>Saúde:</b> <span id="mSaude"></span></div>
+                <button class="btn-edit no-print" onclick="toggleEdit(true)">EDITAR PERFIL</button>
+            </div>
+
+            <div id="editPerfil" style="display:none;">
+                <h3 style="color:var(--primary)">Corrigir Dados</h3>
+                <input type="text" id="eNome" placeholder="Nome">
+                <input type="text" id="eData" placeholder="Niver">
+                <input type="text" id="eInsc" placeholder="Data Inscrição">
+                <input type="number" id="eAnoNasc" placeholder="Ano Nasc">
+                <input type="text" id="eMae" placeholder="Mãe">
+                <input type="text" id="ePai" placeholder="Pai">
+                <input type="text" id="eCel" placeholder="Celular">
+                <input type="text" id="eBairro" placeholder="Bairro">
+                <textarea id="eSaude" placeholder="Saúde"></textarea>
+                <button class="btn-add" onclick="salvarEdicao()">SALVAR ALTERAÇÕES</button>
+                <button style="background:#666; margin-top:5px;" onclick="toggleEdit(false)">CANCELAR</button>
+            </div>
+            
+            <hr>
+            <h3>📂 Ficheiros (Documentos)</h3>
+            <div class="no-print" style="background:#f9f9f9; padding:10px; border-radius:8px;">
+                <select id="tipoDoc">
+                    <option value="Cédula">Cédula/Boletim</option>
+                    <option value="Vacina">Cartão Vacina</option>
+                    <option value="Sanidade">Declaração Sanidade</option>
+                </select>
+                <input type="file" id="inputDoc" accept="image/*,application/pdf" onchange="uploadDoc(this)">
+            </div>
+            <div id="listaDocs"></div>
+
+            <h3 style="color:var(--primary); margin-top:20px;">💰 Mensalidades</h3>
+            <div id="mMensalidades" class="grid-mensalidade"></div>
+            
+            <button onclick="fecharModal()" style="background:#555; margin-bottom:10px;">VOLTAR</button>
+            <button id="btnExcluir" style="background:var(--danger)">EXCLUIR ALUNO</button>
+        </div>
+    </div>
+
+    <script>
+        const SENHA_CORRETA = "1234";
+        const mesesNomes = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
+        let lista = JSON.parse(localStorage.getItem('bd_escola_final')) || [];
+        let alunoAbertoIdx = null;
+
+        function fazerLogin() {
+            if(document.getElementById('senhaInput').value === SENHA_CORRETA) {
+                document.getElementById('tela-login').style.display = 'none';
+                document.getElementById('area-gestao').style.display = 'block';
+                renderizar();
+            } else { document.getElementById('erro').style.display = 'block'; }
+        }
+
+        function renderizar() {
+            const corpo = document.getElementById('tabela');
+            const busca = document.getElementById('busca').value.toLowerCase();
+            corpo.innerHTML = "";
+            lista.filter(a => a.nome.toLowerCase().includes(busca)).forEach((aluno) => {
+                const idx = lista.indexOf(aluno);
+                const idade = new Date().getFullYear() - aluno.ano;
+                corpo.innerHTML += `<tr onclick="abrirFicha(${idx})" style="cursor:pointer">
+                    <td>${aluno.data}</td>
+                    <td style="color:var(--primary); font-weight:bold;">${aluno.nome}</td>
+                    <td>${aluno.grupo}</td>
+                    <td>${idade || '--'} anos</td></tr>`;
+            });
+        }
+
+        function adicionar() {
+            const dados = {
+                nome: document.getElementById('nome').value,
+                data: document.getElementById('data').value,
+                ano: document.getElementById('anoNasc').value,
+                dataInscricao: document.getElementById('dataInscricao').value,
+                grupo: document.getElementById('grupo').value,
+                saude: document.getElementById('saude').value,
+                nomeMae: document.getElementById('nomeMae').value,
+                nomePai: document.getElementById('nomePai').value,
+                celularPais: document.getElementById('celularPais').value,
+                bairro: document.getElementById('bairro').value,
+                foto: '', docs: {}, pagamentos: Array(12).fill(0)
+            };
+            if(dados.nome) {
+                lista.push(dados); salvar(); renderizar(); alert("Sucesso!");
+                ['nome','data','anoNasc','dataInscricao','nomeMae','nomePai','celularPais','bairro','saude'].forEach(id => document.getElementById(id).value = "");
+            }
+        }
+
+        function abrirFicha(index) {
+            alunoAbertoIdx = index; toggleEdit(false);
+            const a = lista[index];
+            document.getElementById('mFotoPreview').src = a.foto || 'https://via.placeholder.com/120?text=FOTO';
+            document.getElementById('mNome').innerText = a.nome;
+            document.getElementById('mData').innerText = a.data;
+            document.getElementById('mInsc').innerText = a.dataInscricao || "---";
+            document.getElementById('mSaude').innerText = a.saude || "---";
+            document.getElementById('mAnoEscolar').innerText = a.grupo;
+            document.getElementById('mMae').innerText = a.nomeMae || "---";
+            document.getElementById('mPai').innerText = a.nomePai || "---";
+            document.getElementById('mCel').innerText = a.celularPais || "---";
+            document.getElementById('mBairro').innerText = a.bairro || "---";
+            renderDocs();
+            
+            const grid = document.getElementById('mMensalidades'); grid.innerHTML = "";
+            mesesNomes.forEach((mes, i) => {
+                const status = a.pagamentos[i] === 1 ? 'pago' : 'pendente';
+                grid.innerHTML += `<div class="mes-item ${status}" onclick="alternarPg(${index}, ${i})">${mes}<br>${a.pagamentos[i] === 1 ? 'PAGO' : 'NÃO PAGO'}</div>`;
+            });
+            document.getElementById('modalAluno').style.display = "block";
+        }
+
+        function toggleEdit(edit) {
+            document.getElementById('viewPerfil').style.display = edit ? 'none' : 'block';
+            document.getElementById('editPerfil').style.display = edit ? 'block' : 'none';
+            if(edit) {
+                const a = lista[alunoAbertoIdx];
+                document.getElementById('eNome').value = a.nome;
+                document.getElementById('eData').value = a.data;
+                document.getElementById('eInsc').value = a.dataInscricao;
+                document.getElementById('eAnoNasc').value = a.ano;
+                document.getElementById('eMae').value = a.nomeMae;
+                document.getElementById('ePai').value = a.nomePai;
+                document.getElementById('eCel').value = a.celularPais;
+                document.getElementById('eBairro').value = a.bairro;
+                document.getElementById('eSaude').value = a.saude;
+            }
+        }
+
+        function salvarEdicao() {
+            const a = lista[alunoAbertoIdx];
+            a.nome = document.getElementById('eNome').value;
+            a.data = document.getElementById('eData').value;
+            a.dataInscricao = document.getElementById('eInsc').value;
+            a.ano = document.getElementById('eAnoNasc').value;
+            a.nomeMae = document.getElementById('eMae').value;
+            a.nomePai = document.getElementById('ePai').value;
+            a.celularPais = document.getElementById('eCel').value;
+            a.bairro = document.getElementById('eBairro').value;
+            a.saude = document.getElementById('eSaude').value;
+            salvar(); renderizar(); abrirFicha(alunoAbertoIdx);
+        }
+
+        function uploadFoto(el) {
+            const reader = new FileReader();
+            reader.onload = (e) => { lista[alunoAbertoIdx].foto = e.target.result; document.getElementById('mFotoPreview').src = e.target.result; salvar(); };
+            reader.readAsDataURL(el.files[0]);
+        }
+
+        function uploadDoc(el) {
+            const tipo = document.getElementById('tipoDoc').value;
+            const reader = new FileReader();
+            reader.onload = (e) => { lista[alunoAbertoIdx].docs[tipo] = e.target.result; salvar(); renderDocs(); };
+            reader.readAsDataURL(el.files[0]);
+        }
+
+        function renderDocs() {
+            const div = document.getElementById('listaDocs'); div.innerHTML = "";
+            const docs = lista[alunoAbertoIdx].docs || {};
+            for(let tipo in docs) {
+                div.innerHTML += `
+                <div class="doc-item">
+                    <span>📄 ${tipo}</span>
+                    <div class="doc-actions no-print">
+                        <button class="btn-icon" style="background:var(--secondary)" onclick="baixarDoc('${tipo}')">💾</button>
+                        <button class="btn-icon" style="background:var(--danger)" onclick="excluirDoc('${tipo}')">🗑️</button>
+                    </div>
+                </div>`;
+            }
+        }
+
+        function baixarDoc(tipo) {
+            const data = lista[alunoAbertoIdx].docs[tipo];
+            const link = document.createElement("a");
+            link.href = data;
+            link.download = `Doc_${tipo}_${lista[alunoAbertoIdx].nome}`;
+            link.click();
+        }
+
+        function excluirDoc(tipo) { if(confirm("Apagar documento?")) { delete lista[alunoAbertoIdx].docs[tipo]; salvar(); renderDocs(); } }
+        function alternarPg(aIdx, mIdx) { lista[aIdx].pagamentos[mIdx] = lista[aIdx].pagamentos[mIdx] === 1 ? 0 : 1; salvar(); abrirFicha(aIdx); }
+        function salvar() { localStorage.setItem('bd_escola_final', JSON.stringify(lista)); }
+        function fecharModal() { document.getElementById('modalAluno').style.display = "none"; }
+        
+        function baixarExcel() {
+            let csv = '\uFEFFNiver;Inscricao;Nome;Mae;Pai;Bairro;Celular\n';
+            lista.forEach(a => csv += `${a.data};${a.dataInscricao};${a.nome};${a.nomeMae};${a.nomePai};${a.bairro};${a.celularPais}\n`);
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = "Lista_Geral_Escola.csv"; link.click();
+        }
+    </script>
+</body>
+</html>
+
+
