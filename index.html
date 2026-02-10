@@ -244,27 +244,50 @@
                     <td>${idade || '--'} anos</td></tr>`;
             });
         }
+async function adicionar() {
+    const dados = {
+        nome: document.getElementById('nome').value,
+        data: document.getElementById('data').value,
+        ano: document.getElementById('anoNasc').value,
+        dataInscricao: document.getElementById('dataInscricao').value,
+        grupo: document.getElementById('grupo').value,
+        saude: document.getElementById('saude').value,
+        nomeMae: document.getElementById('nomeMae').value,
+        nomePai: document.getElementById('nomePai').value,
+        celularPais: document.getElementById('celularPais').value,
+        bairro: document.getElementById('bairro').value,
+        foto: '', 
+        docs: {}, 
+        pagamentos: Array(12).fill(0),
+        dataCriacao: new Date().toISOString()
+    };
 
-        function adicionar() {
-            const dados = {
-                nome: document.getElementById('nome').value,
-                data: document.getElementById('data').value,
-                ano: document.getElementById('anoNasc').value,
-                dataInscricao: document.getElementById('dataInscricao').value,
-                grupo: document.getElementById('grupo').value,
-                saude: document.getElementById('saude').value,
-                nomeMae: document.getElementById('nomeMae').value,
-                nomePai: document.getElementById('nomePai').value,
-                celularPais: document.getElementById('celularPais').value,
-                bairro: document.getElementById('bairro').value,
-                foto: '', docs: {}, pagamentos: Array(12).fill(0)
-            };
-            if(dados.nome) {
-                lista.push(dados); salvar(); renderizar(); alert("Sucesso!");
-                ['nome','data','anoNasc','dataInscricao','nomeMae','nomePai','celularPais','bairro','saude'].forEach(id => document.getElementById(id).value = "");
-            }
+    if(dados.nome) {
+        try {
+            // Importa as ferramentas de escrita do Firebase
+            const { collection, addDoc } = await import("https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js");
+            
+            // Grava o aluno diretamente na nuvem
+            await addDoc(collection(window.db, "alunos"), dados);
+            
+            alert("Sucesso! Aluno guardado na nuvem.");
+            
+            // Limpa os campos
+            ['nome','data','anoNasc','dataInscricao','nomeMae','nomePai','celularPais','bairro','saude'].forEach(id => {
+                document.getElementById(id).value = "";
+            });
+            
+            // Recarrega para atualizar a tabela
+            location.reload();
+        } catch (e) {
+            console.error("Erro ao salvar no Firebase:", e);
+            alert("Erro de conexão. O aluno foi guardado apenas localmente.");
+            lista.push(dados); salvar(); renderizar();
         }
+    }
+}
 
+        
         function abrirFicha(index) {
             alunoAbertoIdx = index; toggleEdit(false);
             const a = lista[index];
@@ -279,6 +302,8 @@
             document.getElementById('mCel').innerText = a.celularPais || "---";
             document.getElementById('mBairro').innerText = a.bairro || "---";
             renderDocs();
+            
+            
             
             const grid = document.getElementById('mMensalidades'); grid.innerHTML = "";
             mesesNomes.forEach((mes, i) => {
@@ -371,5 +396,27 @@
     </script>
 </body>
 </html>
+<script type="module">
+  // Importando as ferramentas do Firebase para o navegador
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+  import { getFirestore, collection, addDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
+  // Suas credenciais oficiais do projeto Imperiodesaber
+  const firebaseConfig = {
+    apiKey: "AIzaSyBeo2od4MzecpXkYVKxqvsYTDUr9y1IZX4",
+    authDomain: "imperiodesaber-ea59d.firebaseapp.com",
+    projectId: "imperiodesaber-ea59d",
+    storageBucket: "imperiodesaber-ea59d.firebasestorage.app",
+    messagingSenderId: "924409738516",
+    appId: "1:924409738516:web:aec0d1caab929e0f87fe01",
+    measurementId: "G-RGRHM552H9"
+  };
 
+  // Inicializando a conexão com a base de dados
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  // Torna o banco de dados acessível para as outras funções do seu sistema
+  window.db = db;
+  console.log("Base de dados fireconectada com sucesso ao Império de Saber!");
+</script>
