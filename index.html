@@ -4,107 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema Império de Saber</title>
-    <style>
-        :root {
-            --primary: #044351;    /* Azul Petróleo do Logo */
-            --accent: #f2b705;     /* Dourado da Coroa */
-            --secondary: #2d7a44;  /* Verde */
-            --danger: #ff4d4d;     /* Vermelho Sair/Excluir */
-            --light: #f4f7f6;
-        }
-
-        body { font-family: 'Segoe UI', sans-serif; background: var(--light); margin: 0; padding: 0; color: #333; }
-        
-        /* TELA DE LOGIN */
-        #tela-login { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; padding: 20px; box-sizing: border-box; }
-        .login-box { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 350px; text-align: center; border-top: 6px solid var(--accent); }
-
-        /* ÁREA DE GESTÃO */
-        #area-gestao { display: none; padding: 15px; }
-
-        /* CABEÇALHO AJUSTADO (PARA O BOTÃO SAIR RESPIRAR) */
-        header { 
-            background: var(--primary); 
-            color: white; 
-            padding: 25px 15px; 
-            border-radius: 8px; 
-            text-align: center; 
-            margin-bottom: 20px; 
-            border-bottom: 5px solid var(--accent); 
-            position: relative; 
-            display: flex; 
-            align-items: center;
-            justify-content: center;
-            min-height: 70px; 
-        }
-
-        header h2 {
-            margin: 0;
-            font-size: 18px;
-            padding-right: 75px; /* Espaço de segurança para o botão */
-            padding-left: 10px;
-        }
-
-        .btn-logout { 
-            background: var(--danger); 
-            width: auto !important; 
-            padding: 8px 12px !important; 
-            position: absolute; 
-            top: 50%; 
-            right: 15px; 
-            transform: translateY(-50%); 
-            font-size: 11px !important; 
-            font-weight: bold;
-            border-radius: 6px;
-            border: none;
-            color: white;
-            cursor: pointer;
-            text-transform: uppercase;
-        }
-
-        /* CARDS E FORMULÁRIOS */
-        .card { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        h3 { margin-top: 0; color: var(--primary); display: flex; align-items: center; gap: 8px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
-
-        input, select, textarea { width: 100%; padding: 12px; margin: 8px 0 15px 0; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 16px; }
-        label { font-weight: bold; font-size: 14px; color: var(--primary); }
-        
-        .btn-group { display: grid; grid-template-columns: 1fr; gap: 10px; }
-        button { width: 100%; padding: 14px; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 15px; text-transform: uppercase; }
-        
-        .btn-add { background: var(--secondary); }
-        .btn-excel { background: #1d6f42; }
-        .btn-print { background: #555; }
-        .btn-edit { background: #007bff; margin-bottom: 10px; }
-
-        /* TABELA */
-        table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; }
-        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
-        th { background: var(--primary); color: white; }
-
-        /* MODAL FICHA DO ALUNO */
-        .modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); overflow-y: auto; }
-        .modal-content { background: white; margin: 2% auto; padding: 20px; width: 92%; border-radius: 15px; max-width: 500px; border-top: 8px solid var(--accent); position: relative; }
-        
-        .foto-perfil-container { text-align: center; margin-bottom: 15px; }
-        .foto-preview { width: 120px; height: 120px; border-radius: 50%; border: 4px solid var(--accent); object-fit: cover; background: #eee; }
-        
-        .ficha-nome { color: var(--primary); font-size: 24px; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-bottom: 15px; text-align: center; }
-        .info-linha { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; font-size: 16px; padding-bottom: 4px; }
-        
-        /* DOCUMENTOS */
-        .doc-item { display: flex; align-items: center; justify-content: space-between; background: #f0f0f0; padding: 10px; margin-top: 8px; border-radius: 5px; border-left: 4px solid var(--primary); }
-        .doc-actions { display: flex; gap: 10px; }
-        .btn-icon { padding: 5px 10px !important; font-size: 12px !important; width: auto !important; }
-
-        /* MENSALIDADES */
-        .grid-mensalidade { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 20px 0; }
-        .mes-item { border: 1px solid #ddd; padding: 10px; text-align: center; border-radius: 8px; font-size: 11px; cursor: pointer; font-weight: bold; }
-        .pago { background: #d4edda; color: #155724; border-color: #c3e6cb; }
-        .pendente { background: #f8d7da; color: #721c24; border-color: #f5c6cb; }
-
-        @media print { .no-print, #tela-login, button, .btn-logout, .btn-icon { display: none !important; } }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -143,6 +43,12 @@
             <input type="text" id="nomePai" placeholder="Nome do Pai">
             <input type="tel" id="celularPais" placeholder="Celular/WhatsApp">
             <input type="text" id="bairro" placeholder="Bairro de Residência">
+            <label style="display: block; margin-top: 10px; font-weight: bold;">Sexo:</label>
+<select id="cadSexo" style="width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 6px; border: 1px solid #ccc;">
+    <option value="Menino">Menino</option>
+    <option value="Menina">Menina</option>
+</select>
+
             <textarea id="saude" placeholder="Observações de Saúde"></textarea>
             
             <div class="btn-group">
@@ -153,6 +59,14 @@
         </div>
 
         <div class="card no-print">
+            <label style="font-weight: bold; color: var(--primary);">Organizar por:</label>
+            <select id="ordenarPor" onchange="renderizar()" style="width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 6px;">
+                <option value="nome">Nome (A-Z)</option>
+                <option value="grupo">Turma</option>
+                <option value="ano">Idade</option>
+                <option value="dataInscricao">Data de Inscrição</option>
+                <option value="data">Aniversário</option>
+            </select>
             <input type="text" id="busca" placeholder="🔍 Buscar aluno por nome..." onkeyup="renderizar()">
         </div>
 
@@ -160,6 +74,20 @@
             <thead><tr><th>Niver</th><th>Nome do Estudante</th><th>Turma</th><th>Idade</th></tr></thead>
             <tbody id="tabela"></tbody>
         </table>
+        <div id="resumoAlunos" style="margin-top: 15px; padding: 15px; background: #f8f9fa; border-radius: 8px; border: 1px solid #ddd; font-size: 14px;">
+    <strong>📊 Resumo da Escola:</strong>
+    <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px;">
+         <span style="background: #007bff; color: white; padding: 4px 10px; border-radius: 20px;">Meninos: <span id="totalMeninos">0</span></span>
+        <span style="background: #e83e8c; color: white; padding: 4px 10px; border-radius: 20px;">Meninas: <span id="totalMeninas">0</span></span>
+        <span style="background: var(--primary); color: white; padding: 4px 8px; border-radius: 4px;">Total: <span id="totalGeral">0</span></span>
+        <span style="background: #6c757d; color: white; padding: 4px 8px; border-radius: 4px;">1º Ano: <span id="totalT1">0</span></span>
+        <span style="background: #6c757d; color: white; padding: 4px 8px; border-radius: 4px;">2º Ano: <span id="totalT2">0</span></span>
+        <span style="background: #6c757d; color: white; padding: 4px 8px; border-radius: 4px;">3º Ano: <span id="totalT3">0</span></span>
+        <span style="background: #6c757d; color: white; padding: 4px 8px; border-radius: 4px;">4º Ano: <span id="totalT4">0</span></span>
+        <span style="background: #6c757d; color: white; padding: 4px 8px; border-radius: 4px;">5º Ano: <span id="totalT5">0</span></span>
+    </div>
+</div>
+
     </div>
 
     <div id="modalAluno" class="modal">
@@ -178,6 +106,18 @@
                 <div class="info-linha">📞 <b>Celular:</b> <span id="mCel"></span></div>
                 <div class="info-linha">🏠 <b>Bairro:</b> <span id="mBairro"></span></div>
                 <div class="info-linha">🏥 <b>Saúde:</b> <span id="mSaude"></span></div>
+                <div class="info-linha" style="display: block; margin-top: 15px;">
+    <h4 style="color: var(--primary); margin-bottom: 5px;">📝 Observações do Admin:</h4>
+    <p id="mObservacao" style="background: #fff8e1; padding: 10px; border-radius: 6px; border-left: 4px solid var(--accent); min-height: 20px; font-style: italic;"></p>
+    <div class="no-print" style="margin-top: 10px; display: flex; gap: 5px; flex-direction: column;">
+    <textarea id="inputObs" placeholder="Escreva ou edite a observação..." style="height: 80px;"></textarea>
+    <div style="display: flex; gap: 5px;">
+        <button class="btn-add" style="flex: 2; font-size: 12px;" onclick="salvarObservacao()">Salvar / Editar</button>
+        <button style="flex: 1; background: var(--danger); color: white; border: none; border-radius: 6px; font-size: 11px; cursor: pointer;" onclick="removerObservacao()">Remover</button>
+    </div>
+</div>
+</div>
+
                 <button class="btn-edit no-print" onclick="toggleEdit(true)">EDITAR PERFIL</button>
             </div>
 
@@ -197,226 +137,63 @@
             </div>
             
             <hr>
-            <h3>📂 Ficheiros (Documentos)</h3>
-            <div class="no-print" style="background:#f9f9f9; padding:10px; border-radius:8px;">
-                <select id="tipoDoc">
-                    <option value="Cédula">Cédula/Boletim</option>
-                    <option value="Vacina">Cartão Vacina</option>
-                    <option value="Sanidade">Declaração Sanidade</option>
-                </select>
-                <input type="file" id="inputDoc" accept="image/*,application/pdf" onchange="uploadDoc(this)">
-            </div>
-            <div id="listaDocs"></div>
+            <hr>
+<h3 style="color:var(--primary); margin-top:20px;">📂 Ficheiros e Documentos</h3>
+
+<div class="bloco-docs">
+    <h4 class="titulo-bloco">📋 Documentos de Inscrição</h4>
+    <div class="upload-container-novo">
+        <select id="tipoDocInsc">
+            <option value="Cédula/Boletim">Cédula ou Boletim</option>
+            <option value="Sanidade">Declaração de Sanidade</option>
+            <option value="Inscrição">Comprovativo de Inscrição</option>
+        </select>
+        <label class="btn-upload-admin">
+            <span>Selecione o Arquivo</span>
+            <input type="file" id="inputDocInsc" hidden onchange="uploadDocInscricao(this)">
+        </label>
+    </div>
+    <div id="listaDocsInsc"></div>
+</div>
+
+<div class="bloco-docs" style="margin-top:15px;">
+    <h4 class="titulo-bloco">💰 Mensalidades e Pagamentos</h4>
+    <div class="upload-container-novo">
+        <select id="mesDoc">
+            <option value="Janeiro">Janeiro</option>
+            <option value="Fevereiro">Fevereiro</option>
+            <option value="Março">Março</option>
+            <option value="Abril">Abril</option>
+            <option value="Maio">Maio</option>
+            <option value="Junho">Junho</option>
+            <option value="Julho">Julho</option>
+            <option value="Agosto">Agosto</option>
+            <option value="Setembro">Setembro</option>
+            <option value="Outubro">Outubro</option>
+            <option value="Novembro">Novembro</option>
+            <option value="Dezembro">Dezembro</option>
+        </select>
+        <input type="date" id="dataPagDoc" title="Data do Pagamento">
+        <label class="btn-upload-admin" style="background: var(--secondary);">
+            <span>Anexar Recibo</span>
+            <input type="file" id="inputDocMensal" hidden onchange="uploadDocMensalidade(this)">
+        </label>
+    </div>
+    <div id="listaDocsMensal"></div>
+</div>
+
 
             <h3 style="color:var(--primary); margin-top:20px;">💰 Mensalidades</h3>
             <div id="mMensalidades" class="grid-mensalidade"></div>
             
             <button onclick="fecharModal()" style="background:#555; margin-bottom:10px;">VOLTAR</button>
-            <button id="btnExcluir" style="background:var(--danger)">EXCLUIR ALUNO</button>
+            <button class="btn-excluir" style="background: var(--danger); ... " onclick="excluirAluno()">
+    EXCLUIR ALUNO
+</button>
         </div>
     </div>
 
-    <script>
-        const SENHA_CORRETA = "1234";
-        const mesesNomes = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
-        let lista = JSON.parse(localStorage.getItem('bd_escola_final')) || [];
-        let alunoAbertoIdx = null;
-
-        function fazerLogin() {
-            if(document.getElementById('senhaInput').value === SENHA_CORRETA) {
-                document.getElementById('tela-login').style.display = 'none';
-                document.getElementById('area-gestao').style.display = 'block';
-                renderizar();
-            } else { document.getElementById('erro').style.display = 'block'; }
-        }
-
-        function renderizar() {
-            const corpo = document.getElementById('tabela');
-            const busca = document.getElementById('busca').value.toLowerCase();
-            corpo.innerHTML = "";
-            lista.filter(a => a.nome.toLowerCase().includes(busca)).forEach((aluno) => {
-                const idx = lista.indexOf(aluno);
-                const idade = new Date().getFullYear() - aluno.ano;
-                corpo.innerHTML += `<tr onclick="abrirFicha(${idx})" style="cursor:pointer">
-                    <td>${aluno.data}</td>
-                    <td style="color:var(--primary); font-weight:bold;">${aluno.nome}</td>
-                    <td>${aluno.grupo}</td>
-                    <td>${idade || '--'} anos</td></tr>`;
-            });
-        }
-async function adicionar() {
-    const dados = {
-        nome: document.getElementById('nome').value,
-        data: document.getElementById('data').value,
-        ano: document.getElementById('anoNasc').value,
-        dataInscricao: document.getElementById('dataInscricao').value,
-        grupo: document.getElementById('grupo').value,
-        saude: document.getElementById('saude').value,
-        nomeMae: document.getElementById('nomeMae').value,
-        nomePai: document.getElementById('nomePai').value,
-        celularPais: document.getElementById('celularPais').value,
-        bairro: document.getElementById('bairro').value,
-        foto: '', 
-        docs: {}, 
-        pagamentos: Array(12).fill(0),
-        dataCriacao: new Date().toISOString()
-    };
-
-    if(dados.nome) {
-        try {
-            // Importa as ferramentas de escrita do Firebase
-            const { collection, addDoc } = await import("https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js");
-            
-            // Grava o aluno diretamente na nuvem
-            await addDoc(collection(window.db, "alunos"), dados);
-            
-            alert("Sucesso! Aluno guardado na nuvem.");
-            
-            // Limpa os campos
-            ['nome','data','anoNasc','dataInscricao','nomeMae','nomePai','celularPais','bairro','saude'].forEach(id => {
-                document.getElementById(id).value = "";
-            });
-            
-            // Recarrega para atualizar a tabela
-            location.reload();
-        } catch (e) {
-            console.error("Erro ao salvar no Firebase:", e);
-            alert("Erro de conexão. O aluno foi guardado apenas localmente.");
-            lista.push(dados); salvar(); renderizar();
-        }
-    }
-}
-
-        
-        function abrirFicha(index) {
-            alunoAbertoIdx = index; toggleEdit(false);
-            const a = lista[index];
-            document.getElementById('mFotoPreview').src = a.foto || 'https://via.placeholder.com/120?text=FOTO';
-            document.getElementById('mNome').innerText = a.nome;
-            document.getElementById('mData').innerText = a.data;
-            document.getElementById('mInsc').innerText = a.dataInscricao || "---";
-            document.getElementById('mSaude').innerText = a.saude || "---";
-            document.getElementById('mAnoEscolar').innerText = a.grupo;
-            document.getElementById('mMae').innerText = a.nomeMae || "---";
-            document.getElementById('mPai').innerText = a.nomePai || "---";
-            document.getElementById('mCel').innerText = a.celularPais || "---";
-            document.getElementById('mBairro').innerText = a.bairro || "---";
-            renderDocs();
-            
-            
-            
-            const grid = document.getElementById('mMensalidades'); grid.innerHTML = "";
-            mesesNomes.forEach((mes, i) => {
-                const status = a.pagamentos[i] === 1 ? 'pago' : 'pendente';
-                grid.innerHTML += `<div class="mes-item ${status}" onclick="alternarPg(${index}, ${i})">${mes}<br>${a.pagamentos[i] === 1 ? 'PAGO' : 'NÃO PAGO'}</div>`;
-            });
-            document.getElementById('modalAluno').style.display = "block";
-        }
-
-        function toggleEdit(edit) {
-            document.getElementById('viewPerfil').style.display = edit ? 'none' : 'block';
-            document.getElementById('editPerfil').style.display = edit ? 'block' : 'none';
-            if(edit) {
-                const a = lista[alunoAbertoIdx];
-                document.getElementById('eNome').value = a.nome;
-                document.getElementById('eData').value = a.data;
-                document.getElementById('eInsc').value = a.dataInscricao;
-                document.getElementById('eAnoNasc').value = a.ano;
-                document.getElementById('eMae').value = a.nomeMae;
-                document.getElementById('ePai').value = a.nomePai;
-                document.getElementById('eCel').value = a.celularPais;
-                document.getElementById('eBairro').value = a.bairro;
-                document.getElementById('eSaude').value = a.saude;
-            }
-        }
-
-        function salvarEdicao() {
-            const a = lista[alunoAbertoIdx];
-            a.nome = document.getElementById('eNome').value;
-            a.data = document.getElementById('eData').value;
-            a.dataInscricao = document.getElementById('eInsc').value;
-            a.ano = document.getElementById('eAnoNasc').value;
-            a.nomeMae = document.getElementById('eMae').value;
-            a.nomePai = document.getElementById('ePai').value;
-            a.celularPais = document.getElementById('eCel').value;
-            a.bairro = document.getElementById('eBairro').value;
-            a.saude = document.getElementById('eSaude').value;
-            salvar(); renderizar(); abrirFicha(alunoAbertoIdx);
-        }
-
-        function uploadFoto(el) {
-            const reader = new FileReader();
-            reader.onload = (e) => { lista[alunoAbertoIdx].foto = e.target.result; document.getElementById('mFotoPreview').src = e.target.result; salvar(); };
-            reader.readAsDataURL(el.files[0]);
-        }
-
-        function uploadDoc(el) {
-            const tipo = document.getElementById('tipoDoc').value;
-            const reader = new FileReader();
-            reader.onload = (e) => { lista[alunoAbertoIdx].docs[tipo] = e.target.result; salvar(); renderDocs(); };
-            reader.readAsDataURL(el.files[0]);
-        }
-
-        function renderDocs() {
-            const div = document.getElementById('listaDocs'); div.innerHTML = "";
-            const docs = lista[alunoAbertoIdx].docs || {};
-            for(let tipo in docs) {
-                div.innerHTML += `
-                <div class="doc-item">
-                    <span>📄 ${tipo}</span>
-                    <div class="doc-actions no-print">
-                        <button class="btn-icon" style="background:var(--secondary)" onclick="baixarDoc('${tipo}')">💾</button>
-                        <button class="btn-icon" style="background:var(--danger)" onclick="excluirDoc('${tipo}')">🗑️</button>
-                    </div>
-                </div>`;
-            }
-        }
-
-        function baixarDoc(tipo) {
-            const data = lista[alunoAbertoIdx].docs[tipo];
-            const link = document.createElement("a");
-            link.href = data;
-            link.download = `Doc_${tipo}_${lista[alunoAbertoIdx].nome}`;
-            link.click();
-        }
-
-        function excluirDoc(tipo) { if(confirm("Apagar documento?")) { delete lista[alunoAbertoIdx].docs[tipo]; salvar(); renderDocs(); } }
-        function alternarPg(aIdx, mIdx) { lista[aIdx].pagamentos[mIdx] = lista[aIdx].pagamentos[mIdx] === 1 ? 0 : 1; salvar(); abrirFicha(aIdx); }
-        function salvar() { localStorage.setItem('bd_escola_final', JSON.stringify(lista)); }
-        function fecharModal() { document.getElementById('modalAluno').style.display = "none"; }
-        
-        function baixarExcel() {
-            let csv = '\uFEFFNiver;Inscricao;Nome;Mae;Pai;Bairro;Celular\n';
-            lista.forEach(a => csv += `${a.data};${a.dataInscricao};${a.nome};${a.nomeMae};${a.nomePai};${a.bairro};${a.celularPais}\n`);
-            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-            const link = document.createElement("a");
-            link.href = URL.createObjectURL(blob);
-            link.download = "Lista_Geral_Escola.csv"; link.click();
-        }
-    </script>
+    <script src="script.js"></script>
+    <script type="module" src="firebase-config.js"></script>
 </body>
 </html>
-<script type="module">
-  // Importando as ferramentas do Firebase para o navegador
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-  import { getFirestore, collection, addDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
-
-  // Suas credenciais oficiais do projeto Imperiodesaber
-  const firebaseConfig = {
-    apiKey: "AIzaSyBeo2od4MzecpXkYVKxqvsYTDUr9y1IZX4",
-    authDomain: "imperiodesaber-ea59d.firebaseapp.com",
-    projectId: "imperiodesaber-ea59d",
-    storageBucket: "imperiodesaber-ea59d.firebasestorage.app",
-    messagingSenderId: "924409738516",
-    appId: "1:924409738516:web:aec0d1caab929e0f87fe01",
-    measurementId: "G-RGRHM552H9"
-  };
-
-  // Inicializando a conexão com a base de dados
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-
-  // Torna o banco de dados acessível para as outras funções do seu sistema
-  window.db = db;
-  console.log("Base de dados fireconectada com sucesso ao Império de Saber!");
-</script>
