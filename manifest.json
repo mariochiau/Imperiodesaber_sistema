@@ -1,0 +1,20 @@
+{
+  "name": "Sistema Império de Saber",
+  "short_name": "Império Saber",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#004b57",
+  "icons": [
+    {
+      "src": "https://via.placeholder.com/192.png?text=Império",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://via.placeholder.com/512.png?text=Império",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

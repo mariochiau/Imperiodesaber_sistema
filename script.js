@@ -422,3 +422,27 @@ async function excluirAluno() {
         }
     }
 }
+let gatilhoInstalacao;
+const botaoInstalar = document.getElementById('btnInstalar');
+
+window.addEventListener('beforeinstallprompt', (e) => {
+    // Impede que o Chrome mostre o aviso automático chato
+    e.preventDefault();
+    // Guarda o evento para usar quando o utilizador clicar no botão
+    gatilhoInstalacao = e;
+    // Mostra o seu botão verde de instalação
+    botaoInstalar.style.display = 'block';
+});
+
+botaoInstalar.addEventListener('click', async () => {
+    if (gatilhoInstalacao) {
+        // Mostra a janela nativa de instalação do Android
+        gatilhoInstalacao.prompt();
+        const { outcome } = await gatilhoInstalacao.userChoice;
+        if (outcome === 'accepted') {
+            console.log('Utilizador instalou o app');
+            botaoInstalar.style.display = 'none';
+        }
+        gatilhoInstalacao = null;
+    }
+});
